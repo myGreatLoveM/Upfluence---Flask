@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div id="dashboard" class="w-full h-full max-h-screen flex overflow-hidden">
+    {% include "components/brand_sidebar.html" %}
+
+    <div class="w-full h-full min-h-screen max-h-screen py-8 overflow-y-auto ">
+        {% block section %}{% endblock %}
+    </div>
+</div>
+
+{% block modal %}{% endblock %}
+
+{% endblock content %}
+
+

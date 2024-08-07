@@ -1,0 +1,282 @@
+{% extends "influencer/infu_layout.html" %}
+
+{% block section %}
+<nav class="flex px-4 mx-auto w-full max-w-7xl" aria-label="Breadcrumb">
+  <ol class="inline-flex items-center space-x-1 md:space-x-3">
+    <li class="inline-flex items-center">
+      <a
+        href="{{ url_for('influencer.dashboard', infu_id=infu_id)}}"
+        class="ml-1 inline-flex text-sm font-medium text-gray-800 hover:underline"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="mr-4 h-4 w-4"
+        >
+          <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+          <polyline points="9 22 9 12 15 12 15 22"></polyline>
+        </svg>
+        Influencer
+      </a>
+    </li>
+
+    {% for crumb in url_for('influencer.engagements', infu_id=infu_id).split('/')[2:]  %}
+        <li>
+      <div class="flex items-center">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="h-4 w-4"
+        >
+          <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+        <a
+          href="#"
+          class="ml-1 text-sm font-medium text-gray-800 hover:underline md:ml-2"
+        >
+          {{ crumb }}
+        </a>
+      </div>
+    </li>
+    {% endfor %}    
+  </ol>
+</nav>
+
+<section class="mx-auto w-full max-w-7xl px-4 py-4 ">
+  <div class="flex flex-col space-y-4 md:flex-row md:items-center md:justify-between">
+    <div>
+      <h2 class="text-lg font-semibold">Public Campaigns</h2>
+      <p class="mt-1 text-sm text-gray-700">
+        This is a list of all public campaigns. You can make request to join public camapigns.
+      </p>
+    </div>
+    <div class="flex items-center gap-10">
+     <div class="relative inline-block text-left">
+        <div>
+            <button id="dropdownButton" type="button" class="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" aria-expanded="true" aria-haspopup="true">
+                Filter by type
+                <svg class="-mr-1 ml-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                    <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.69l3.71-4.46a.75.75 0 011.08-1.04l-4.25 5.12a.75.75 0 01-1.08 0L5.23 7.21a.75.75 0 01-.02-1.06z" clip-rule="evenodd" />
+                </svg>
+            </button>
+        </div>
+
+        <!-- Dropdown menu, show/hide based on menu state. -->
+        <div id="dropdownMenu" class="hidden origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="dropdownButton">
+            <div class="py-1" role="none">
+                <!-- Active: "bg-gray-100", Not Active: "" -->
+                <a href="#" class="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-200" role="menuitem">All</a>
+                <a href="#" class="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-200" role="menuitem">Private</a>
+                <a href="#"  class="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-200" role="menuitem">Public</a>
+            </div>
+        </div>
+    </div>
+      
+    <button
+      type="button"
+      id="show-active-campaign-btn"
+      class="rounded-md bg-black px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-black/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
+    >
+      Show Active Campaigns
+    </button>
+    </div>
+  </div>
+
+<section class="grid grid-cols-4 mt-5 gap-5">
+  {% for campaign in public_campaigns  %}
+    <div class="w-full p-4 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 flex flex-col items-start justify-between gap-3 overflow-hidden text-ellipsis">
+        <div class="mb-3 overflow-hidden">
+          <h5 class="mb-2 text-xl font-semibold tracking-tight ">{{ campaign.name }}</h5>
+          <p class="flex w-full text-wrap font-normal h-auto text-medium text-ellipsis">description</p>
+        </div>
+        <div class="flex space-y-2 md:flex-row md:space-x-3 md:space-y-0">
+            <button
+                type="button"
+                class="rounded-md border border-black px-3 py-1 text-sm font-semibold text-black shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
+            >
+                        <a href="#">View</a>
+            </button>
+            <button
+                type="button"
+                class="rounded-md border border-yellow-600 px-3 py-1 text-sm font-semibold text-yellow-600 shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-600"
+            >
+                            <a href="#">Edit</a>
+
+            </button>
+            <button
+                type="button"
+                class="rounded-md border border-red-600 px-3 py-1 text-sm font-semibold text-red-600 shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600"
+            >
+                                <a href="#">Block</a>
+            </button>
+        </div>
+        <button
+            type="button"
+            class="request-btn rounded-md bg-green-600 px-3 py-1 text-sm font-semibold text-white shadow-sm hover:bg-green-600/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600"
+        >
+        <a href="#">
+            Request Sponsor
+        </a>
+        </button>
+    </div>
+  {% endfor %}
+</section>
+</section>
+{% endblock %}
+
+{% block modal %}
+<!-- Main modal -->
+<div id="request-modal" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+    <div class="relative  p-4 w-full max-w-md max-h-full">
+        <!-- Modal content -->
+        <div class="relative bg-rose-400 rounded-lg shadow ">
+            <!-- Modal header -->
+            <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                <h3 class="text-lg font-semibold text-gray-900">
+                    Make Request to Sponsor
+                </h3>
+                <button id="close-modal-btn" type="button" class="text-gray-600 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center" data-modal-toggle="crud-modal">
+                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                    </svg>
+                    <span class="sr-only">Close modal</span>
+                </button>
+            </div>
+            <!-- Modal body -->
+            <form id="request-form" action="#" method="post" class="p-4 md:p-5">
+              
+                <div class="grid gap-4 mb-4">
+                    <div>
+                      <label for="amount" class="block mb-2 text-sm font-medium text-gray-900 ">Amount</label>
+                      <input type="number" name="amount" id="amount" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="$2999" required>
+                    </div>
+                    <div>
+                      <select id="campaigns" name="campaign" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5" required>
+                        <option selected>Select Campaign</option>
+                        {% for campaign in public_campaigns %}
+                          <option value={{ campaign.id }}>{{ campaign.name }}</option>
+                        {% endfor %}
+                      </select>
+                  </div>
+                </div>
+                <button type="submit" class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                    Submit Request
+                </button>
+            </form>
+        </div>
+    </div>
+</div> 
+<div id="active-campaigns-modal" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+    <div class="relative  p-4 w-full max-w-md max-h-full">
+        <!-- Modal content -->
+        <div class="relative bg-amber-400 rounded-lg shadow ">
+            <!-- Modal header -->
+            <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                <h3 class="text-lg font-semibold text-gray-900">
+                    Active Campaigns
+                </h3>
+                <button id="close-modal-btn1" type="button" class="text-gray-600 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center" data-modal-toggle="crud-modal">
+                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                    </svg>
+                    <span class="sr-only">Close modal</span>
+                </button>
+            </div>
+            {% for campaign in active_campaigns %}
+            <div class="w-full flex justify-between items-center px-4 py-2">
+              <h5 class="mb-2 text-xl font-semibold tracking-tight ">name</h5>
+              <button
+                  type="button"
+                  class="rounded-md bg-green-600 px-3 py-1 text-sm font-semibold text-white shadow-sm hover:bg-green-600/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600"
+              >
+              <a href="#">
+                  Create Post
+              </a>
+              </button>
+            </div>
+            {% endfor %}
+
+            
+        </div>
+    </div>
+</div> 
+{% endblock %}
+
+{% block script %}
+<script>
+    document.getElementById('dropdownButton').addEventListener('click', function(event) {
+            const menu = document.getElementById('dropdownMenu');
+            const button = event.currentTarget;
+            menu.classList.toggle('hidden');
+            button.classList.toggle('bg-gray-100');
+            button.classList.toggle('text-gray-900');
+        })
+
+        // Close dropdown when clicking outside
+    document.addEventListener('click', function(event) {
+        const menu = document.getElementById('dropdownMenu');
+        const button = document.getElementById('dropdownButton');
+        if (!button.contains(event.target) && !menu.contains(event.target)) {
+            menu.classList.add('hidden');
+            button.classList.remove('bg-gray-100');
+            button.classList.remove('text-gray-900');
+        }
+    })
+
+    const requestBtns = document.querySelectorAll('.request-btn')
+    const closeModalBtn = document.querySelector('#close-modal-btn')
+    const form = document.querySelector('#request-form')
+
+    const requestFunc = function(e) {
+      document.querySelector('#request-modal').classList.remove('hidden')
+      document.querySelector('#dashboard').classList.add('opacity-50')
+    }
+    
+    requestBtns.forEach((btn) => {
+      btn.addEventListener('click', requestFunc)
+    })
+
+    closeModalBtn.addEventListener('click', function () {
+        document.querySelector('#request-modal').classList.add('hidden')
+        document.querySelector('#dashboard').classList.remove('opacity-50')
+        closeModalBtn.removeEventListener('click', () => {})
+    })
+
+    form.addEventListener('submit', function() {
+        closeModalBtn.click()
+        form.removeEventListener('submit')
+    })
+
+    const showActiveCampaignBtn = document.querySelector('#show-active-campaign-btn')
+    const closeModalBtn1 = document.querySelector('#close-modal-btn1')
+
+    showActiveCampaignBtn.addEventListener('click', function () {
+        document.querySelector('#active-campaigns-modal').classList.remove('hidden')
+        document.querySelector('#dashboard').classList.add('opacity-50')
+        showActiveCampaignBtn.removeEventListener('click', () => {})
+    })
+
+    closeModalBtn1.addEventListener('click', function () {
+        document.querySelector('#active-campaigns-modal').classList.add('hidden')
+        document.querySelector('#dashboard').classList.remove('opacity-50')
+        closeModalBtn1.removeEventListener('click', () => {})
+    })
+
+</script>
+{% endblock %}
+
+

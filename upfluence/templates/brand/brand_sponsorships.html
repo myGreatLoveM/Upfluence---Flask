@@ -1,0 +1,166 @@
+{% extends "brand/brand_layout.html" %}
+
+{% block section %}
+<nav class="flex px-4 mx-auto w-full max-w-7xl" aria-label="Breadcrumb">
+  <ol class="inline-flex items-center space-x-1 md:space-x-3">
+    <li class="inline-flex items-center">
+      <a
+        href="{{ url_for('brand.dashboard', brand_id=brand_id)}}"
+        class="ml-1 inline-flex text-sm font-medium text-gray-800 hover:underline "
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="mr-4 h-4 w-4"
+        >
+          <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+          <polyline points="9 22 9 12 15 12 15 22"></polyline>
+        </svg>
+        brand
+      </a>
+    </li>
+
+    {% for crumb in url_for('brand.sponsorships', brand_id=brand_id).split('/')[2:]  %}
+        <li>
+      <div class="flex items-center">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="h-4 w-4"
+        >
+          <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+        <a
+          href="#"
+          class="ml-1 text-sm font-medium text-gray-800 hover:underline md:ml-2"
+        >
+          {{ crumb }}
+        </a>
+      </div>
+    </li>
+    {% endfor %}    
+</ol>
+</nav>
+
+
+
+
+<section class="mx-auto w-full max-w-7xl px-4 py-4">
+<div class="flex flex-col space-y-4 md:flex-row md:items-center md:justify-between md:space-y-0">
+    <div>
+      <h2 class="text-lg font-semibold">Sponsorships</h2>
+      <p class="mt-1 text-sm text-gray-700">
+        This is a list of all sponsorships. 
+      </p>
+    </div>
+    <div class="flex items-center gap-10">
+     <div class="relative inline-block text-left">
+        <div>
+            <button id="dropdownButton" type="button" class="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" aria-expanded="true" aria-haspopup="true">
+                Filter by type
+                <svg class="-mr-1 ml-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                    <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.69l3.71-4.46a.75.75 0 011.08-1.04l-4.25 5.12a.75.75 0 01-1.08 0L5.23 7.21a.75.75 0 01-.02-1.06z" clip-rule="evenodd" />
+                </svg>
+            </button>
+        </div>
+
+        <!-- Dropdown menu, show/hide based on menu state. -->
+        <div id="dropdownMenu" class="z-10 hidden origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="dropdownButton">
+            <div class="py-1" role="none">
+                <!-- Active: "bg-gray-100", Not Active: "" -->
+                <a href="{{ url_for('brand.sponsorships', brand_id=brand_id) }}" class="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-200" role="menuitem">All</a>
+                <a href="{{ url_for('brand.sponsorships', brand_id=brand_id, filter='pending') }}" class="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-200" role="menuitem">Pending Payment</a>
+                <a href="{{ url_for('brand.sponsorships', brand_id=brand_id, filter='processed') }}"  class="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-200" role="menuitem">Processed</a>
+                <a href="{{ url_for('brand.sponsorships', brand_id=brand_id, filter='review') }}"  class="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-200" role="menuitem">Reviewed</a>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+
+<div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-5">
+    <table class="w-full text-sm text-left rtl:text-right text-gray-500 ">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50 ">
+            <tr>
+                <th scope="col" class="px-6 py-3">
+                    Camapign name
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Influencer name
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    status
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Amount
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Action
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+           {% for sponsorship in sponsorships %}
+               <tr class="odd:bg-white even:bg-gray-50 ">
+                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
+                    {{ sponsorship.campaign.name }}
+                </th>
+                <td class="px-6 py-4">
+                    {{ sponsorship.influencer.name }}
+                </td>
+                <td class="px-6 py-4">
+                    {{ sponsorship.payment.status }}
+                </td>
+                <td class="px-6 py-4">
+                    {{ sponsorship.amount }}
+                </td>
+                <td class="px-6 py-4">
+                    <a href="#" class="font-medium text-blue-600  hover:underline">Edit</a>
+                </td>
+              </tr>
+           {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+
+</section>
+
+{% endblock %}
+
+{% block script %}
+<script>
+   document.getElementById('dropdownButton').addEventListener('click', function(event) {
+            const menu = document.getElementById('dropdownMenu');
+            const button = event.currentTarget;
+            menu.classList.toggle('hidden');
+            button.classList.toggle('bg-gray-100');
+            button.classList.toggle('text-gray-900');
+        })
+
+        // Close dropdown when clicking outside
+  document.addEventListener('click', function(event) {
+      const menu = document.getElementById('dropdownMenu');
+      const button = document.getElementById('dropdownButton');
+      if (!button.contains(event.target) && !menu.contains(event.target)) {
+          menu.classList.add('hidden');
+          button.classList.remove('bg-gray-100');
+          button.classList.remove('text-gray-900');
+      }
+  })
+</script>
+{% endblock %}

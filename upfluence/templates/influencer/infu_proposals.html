@@ -1,0 +1,166 @@
+{% extends "influencer/infu_layout.html" %}
+
+{% block section %}
+<nav class="flex px-4 mx-auto w-full max-w-7xl" aria-label="Breadcrumb">
+  <ol class="inline-flex items-center space-x-1 md:space-x-3">
+    <li class="inline-flex items-center">
+      <a
+        href="#"
+        class="ml-1 inline-flex text-sm font-medium text-gray-800 hover:underline "
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="mr-4 h-4 w-4"
+        >
+          <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+          <polyline points="9 22 9 12 15 12 15 22"></polyline>
+        </svg>
+        Influencer
+      </a>
+    </li>
+
+    {% for crumb in url_for('influencer.proposals', infu_id=infu_id).split('/')[2:]  %}
+        <li>
+      <div class="flex items-center">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="h-4 w-4"
+        >
+          <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+        <a
+          href="#"
+          class="ml-1 text-sm font-medium text-gray-800 hover:underline md:ml-2"
+        >
+          {{ crumb }}
+        </a>
+      </div>
+    </li>
+    {% endfor %}    
+</ol>
+</nav>
+
+
+
+<section class="mx-auto w-full max-w-7xl px-4 py-4">
+  <div class="flex flex-col space-y-4 md:flex-row md:items-center md:justify-between md:space-y-0">
+    <div>
+      <h2 class="text-lg font-semibold">Proposals</h2>
+      <p class="mt-1 text-sm text-gray-700">
+        This is a list of all proposals. Proposal status are pending, accepted, rejected, negotiate or public request for public campaign
+      </p>
+    </div>
+    <div class="flex items-center gap-10">
+     <div class="relative inline-block text-left">
+        <button id="dropdownButton" type="button" class="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" aria-expanded="true" aria-haspopup="true">
+            Filter by type
+            <svg class="-mr-1 ml-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.69l3.71-4.46a.75.75 0 011.08-1.04l-4.25 5.12a.75.75 0 01-1.08 0L5.23 7.21a.75.75 0 01-.02-1.06z" clip-rule="evenodd" />
+            </svg>
+        </button>
+
+        <!-- Dropdown menu, show/hide based on menu state. -->
+        <div id="dropdownMenu" class="z-10 hidden origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="dropdownButton">
+            <div class="py-1" role="none">
+                <!-- Active: "bg-gray-100", Not Active: "" -->
+                <a href="#" class="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-200">All</a>
+                <a href="#" class="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-200">Pending</a>
+                <a href="#"  class="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-200">Accepted</a>
+                <a href="#"  class="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-200">Rejected</a>
+                <a href="#"  class="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-200">Re-Negotiate</a>
+                <a href="#"  class="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-200">Request</a>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+<section class="grid grid-cols-4 mt-5 gap-5">
+  {% if propsals %}
+    {% for proposal in proposals %}
+        {% if proposal.status == 'pending' %}
+    <div class="block max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 flex flex-col items-start gap-4">
+        <h5 class="mb-2 text-xl font-semibold tracking-tight ">Brand : {{ proposal.brand.name }}</h5>
+        <p class="font-normal text-medium">Campaign : {{ proposal.campaign.name }}</p>
+        <div>
+            {% if proposal.campaign.is_public %}
+            <span class="max-w-content bg-purple-100 text-purple-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded">public</span>
+            {% else %}
+            <span class="bg-pink-100 text-pink-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded ">private</span>
+        {% endif %} 
+        
+        <span class="bg-indigo-100 text-indigo-800 text-noraml font-medium me-2 px-2.5 py-0.5 rounded ">${{ proposal.original_amount }}</span>
+
+        </div>
+        <p>Message : {{ proposal.message }}</p>
+        <p>Requirements :{{ proposal.requirements }}</p>
+        
+        <div class="flex space-y-2 md:flex-row md:space-x-3 md:space-y-0">
+            <button
+                type="button"
+                class="rounded-md border border-black px-3 py-1 text-sm font-semibold text-black shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
+            >
+                  <a href="{{ url_for('influencer.handle_proposal', infu_id=infu_id, proposal_id=proposal.id, status='accept') }}">Accept</a>
+            </button>
+            <button
+                type="button"
+                class="rounded-md border border-yellow-600 px-3 py-1 text-sm font-semibold text-yellow-600 shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-600"
+            >
+                  <a href="{{ url_for('influencer.handle_proposal', infu_id=infu_id, proposal_id=proposal.id, status='reject') }}">Reject</a>
+            </button>
+            <button
+                type="button"
+                class="rounded-md border border-red-600 px-3 py-1 text-sm font-semibold text-red-600 shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600"
+            >
+                                <a href="#">Negotiate</a>
+            </button>
+        </div>
+    </div>
+    {% endif %}
+    {% endfor %}
+    {% else %}
+    <h1>No Proposals for now </h1>
+    {% endif %}
+</section>
+</section>
+{% endblock %}
+
+
+
+{% block script %}
+<script>
+   document.getElementById('dropdownButton').addEventListener('click', function(event) {
+            const menu = document.getElementById('dropdownMenu');
+            const button = event.currentTarget;
+            menu.classList.toggle('hidden');
+            button.classList.toggle('bg-gray-100');
+            button.classList.toggle('text-gray-900');
+        })
+
+        // Close dropdown when clicking outside
+  document.addEventListener('click', function(event) {
+      const menu = document.getElementById('dropdownMenu');
+      const button = document.getElementById('dropdownButton');
+      if (!button.contains(event.target) && !menu.contains(event.target)) {
+          menu.classList.add('hidden');
+          button.classList.remove('bg-gray-100');
+          button.classList.remove('text-gray-900');
+      }
+  })
+</script>
+{% endblock %}

@@ -1,0 +1,5 @@
+.venv
+migrations
+resource
+
+__pycache__

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Base</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+</head>
+<body class="">
+    {% include "components/toast.html" %}
+
+    {% block content %}
+    {% endblock %}
+
+    <script>
+        const successCloseBtn = document.getElementById('success-close-btn')
+        if (successCloseBtn) {
+            successCloseBtn.addEventListener('click', function() {
+            console.log('Close button clicked')
+            document.getElementById('success-toast').innerHTML = ''
+            successCloseBtn.removeEventListener('click', function() {
+                console.log('removed event listener')
+            })
+        }) 
+        }
+
+        const errorCloseBtn = document.getElementById('error-close-btn')
+        if (errorCloseBtn) {
+            errorCloseBtn.addEventListener('click', function() {
+            console.log('Close button clicked')
+            document.getElementById('error-toast').innerHTML = ''
+            errorCloseBtn.removeEventListener('click', function() {
+                console.log('removed event listener')
+            })
+        }) 
+        }
+    </script>
+        
+    {% block script %}
+    {% endblock %}
+
+</body>
+</html>

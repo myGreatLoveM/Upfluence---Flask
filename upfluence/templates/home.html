@@ -1,0 +1,42 @@
+{% extends "base.html" %} 
+
+{% block content %} 
+
+{% include "components/navbar.html" %}
+
+<div class="relative isolate z-0 bg-white px-6 pt-14 lg:px-8">
+  <div class="relative mx-auto max-w-2xl py-20">
+    <div class="text-center">
+      <h1 class="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
+        Your Go-To for Influencer Marketing
+      </h1>
+      <p class="mt-6 text-lg leading-8 text-gray-600">
+        Influencer marketing is not just a trend; it’s a thriving industry worth
+        is estimated to reach $21.1 billion in 2023. At the heart of this
+        digital revolution are over 50 million creative influencers, shaping
+        their careers around engaging, informative, and entertaining content.
+        This presents an exciting opportunity for brands to connect with their
+        target audiences like never before.
+      </p>
+      <div class="mt-10 flex items-center justify-center gap-x-2">
+        <button
+          type="button"
+          class="rounded-md bg-black px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-black/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
+        >
+          View Docs
+        </button>
+        <button
+          type="button"
+          class="rounded-md border border-black px-3 py-2 text-sm font-semibold text-black shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
+        >
+          Get Started
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+
+

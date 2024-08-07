@@ -1,0 +1,117 @@
+{% extends "brand/brand_layout.html" %}
+
+{% block section %}
+<nav class="flex px-4 mx-auto w-full max-w-7xl" aria-label="Breadcrumb">
+  <ol class="inline-flex items-center space-x-1 md:space-x-3">
+    <li class="inline-flex items-center">
+      <a
+        href="{{ url_for('brand.dashboard', brand_id=brand_id)}}"
+        class="ml-1 inline-flex text-sm font-medium text-gray-800 hover:underline md:ml-2"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="mr-4 h-4 w-4"
+        >
+          <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+          <polyline points="9 22 9 12 15 12 15 22"></polyline>
+        </svg>
+        brand
+      </a>
+    </li>
+
+    {% for crumb in url_for('brand.search_influencer', brand_id=brand_id, campaign_id=campaign_id).split('/')[2:]  %}
+        <li>
+      <div class="flex items-center">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="h-4 w-4"
+        >
+          <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+        <a
+          href="#"
+          class="ml-1 text-sm font-medium text-gray-800 hover:underline md:ml-2"
+        >
+          {{ crumb }}
+        </a>
+      </div>
+    </li>
+    {% endfor %}    
+
+</nav>
+
+
+
+<section class="mx-auto w-full max-w-7xl px-4 py-4">
+  <button
+  type="button"
+  class="mt-3 rounded-md border border-green-600 px-3 py-1 text-sm font-semibold text-green-600 shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600"
+>
+  <a href="{{ url_for('brand.campaigns', brand_id=brand_id) }}">Back</a>
+</button>
+
+ <form class="mt-3 flex items-center gap-5 " action="{{ url_for('brand.search_influencer', brand_id=brand_id, campaign_id=campaign_id) }}" method="post">
+    <select id="search-by" name="search-by" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5" required>
+      <option selected>Search by</option>
+      <option value="name">Name</option>
+      <option value="reach">Reach</option>
+      <option value="niche">Niche</option>
+    </select>
+    <div class="flex items-center justify-start space-x-2 ">
+      <input
+        class="h-10 rounded-md border border-black/30 bg-transparent px-3 py-2 text-sm placeholder:text-gray-600 focus:outline-none focus:ring-1 focus:ring-black/30 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
+        type="text"
+        name="keyword"
+        placeholder="Search Influencer"
+      />
+      <button
+        type="submit"
+        class="rounded-md bg-black px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-black/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
+      >
+        Search 
+      </button>
+    </div>
+</form>
+
+{% if influencers %}
+<section class="grid grid-cols-4 mt-5 gap-5">
+    {% for influencer in influencers %}
+    <div class="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 flex flex-col items-start gap-3">
+        <h5 class="mb-2 text-xl font-semibold tracking-tight ">{{ influencer.name }}</h5>
+        <p class="font-normal text-medium">{{ influencer.industry }}</p>
+
+        <div class="flex space-y-2 md:flex-row md:space-x-3 md:space-y-0">
+            <button
+                type="button"
+                class="rounded-md border border-black px-3 py-1 text-sm font-semibold text-black shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
+            >
+                        <a href="{{ url_for('brand.show_influencer_profile',  brand_id=brand_id, influencer_id=influencer.idcampaign_id=campaign_id,  }}">View Profile</a>
+            </button>
+        </div>
+          
+    </div>
+    {% endfor %}
+</section>
+
+{% endif %}
+
+    
+</section>
+
+{% endblock %}
